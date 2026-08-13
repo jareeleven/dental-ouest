@@ -133,32 +133,48 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 		<div class="section-head">
 			<span class="eyebrow"><span class="emoji-text">🛠️</span> Nos techniciens</span>
 			<h2 class="section-title">Des experts sur <span class="grad">intervention</span></h2>
+			<p class="section-sub">Choisissez le technicien le plus adapté à votre panne.</p>
 			<div class="decor"><span></span><span></span><span></span></div>
 		</div>
-		<div class="tech-grid" style="grid-template-columns:repeat(3,1fr);">
-							<div class="tech-card reveal" style="background:#fff;border-color:#EAF0F7;">
-					<div class="tech-ava"><span class="emoji-text">⚡</span></div>
-					<div>
-						<h3 style="color:var(--navy);">Électronique &amp; modules</h3>
-						<p style="color:var(--ink);">Diagnostic des cartes électroniques et remplacement des modules.</p>
-					</div>
+		
+		<div class="tech-grid">
+			<div class="tech-card reveal" style="background:#fff;border-color:#EAF0F7;">
+				<div class="tech-ava"><span class="emoji-text">🛠️</span></div>
+				<div>
+					<h3 style="color:var(--navy);">A. Mansouri</h3>
+					<p style="color:var(--ink);">Électronique &amp; modules</p>
+					<p class="tech-coords"><a href="tel:+2135550001">+213 555 00 01</a></p>
+					<p class="tech-coords"><a href="mailto:tech.electronique@dentalouest.net">tech.electronique@dentalouest.net</a></p>
 				</div>
-							<div class="tech-card reveal" style="background:#fff;border-color:#EAF0F7;">
-					<div class="tech-ava"><span class="emoji-text">🔩</span></div>
-					<div>
-						<h3 style="color:var(--navy);">Hydraulique &amp; fluides</h3>
-						<p style="color:var(--ink);">Circuits d'eau, d'air, compresseurs et crachoirs.</p>
-					</div>
+			</div>
+			<div class="tech-card reveal" style="background:#fff;border-color:#EAF0F7;">
+				<div class="tech-ava"><span class="emoji-text">🛠️</span></div>
+				<div>
+					<h3 style="color:var(--navy);">S. Benali</h3>
+					<p style="color:var(--ink);">Hydraulique &amp; fluides</p>
+					<p class="tech-coords"><a href="tel:+2135550002">+213 555 00 02</a></p>
+					<p class="tech-coords"><a href="mailto:tech.hydraulique@dentalouest.net">tech.hydraulique@dentalouest.net</a></p>
 				</div>
-							<div class="tech-card reveal" style="background:#fff;border-color:#EAF0F7;">
-					<div class="tech-ava"><span class="emoji-text">📡</span></div>
-					<div>
-						<h3 style="color:var(--navy);">Radiologie &amp; imagerie</h3>
-						<p style="color:var(--ink);">Capteurs, émetteurs de rayons X et logiciels d'imagerie.</p>
-					</div>
+			</div>
+			<div class="tech-card reveal" style="background:#fff;border-color:#EAF0F7;">
+				<div class="tech-ava"><span class="emoji-text">🛠️</span></div>
+				<div>
+					<h3 style="color:var(--navy);">R. Kaddour</h3>
+					<p style="color:var(--ink);">Radiologie &amp; imagerie</p>
+					<p class="tech-coords"><a href="tel:+2135550003">+213 555 00 03</a></p>
+					<p class="tech-coords"><a href="mailto:tech.radiologie@dentalouest.net">tech.radiologie@dentalouest.net</a></p>
 				</div>
-					</div>
-	</div>
+			</div>
+			<div class="tech-card reveal" style="background:#fff;border-color:#EAF0F7;">
+				<div class="tech-ava"><span class="emoji-text">🛠️</span></div>
+				<div>
+					<h3 style="color:var(--navy);">M. Haddad</h3>
+					<p style="color:var(--ink);">Installation &amp; mise en service</p>
+					<p class="tech-coords"><a href="tel:+2135550004">+213 555 00 04</a></p>
+					<p class="tech-coords"><a href="mailto:tech.installation@dentalouest.net">tech.installation@dentalouest.net</a></p>
+				</div>
+			</div>
+		</div>
 </section>
 
 <section class="section" style="padding-top:0;">
@@ -225,7 +241,18 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 					<label>Adresse e-mail <span class="req">*</span></label>
 					<input type="email" name="do_email" required="">
 				</div>
+				
 				<div class="form-field full">
+					<label>Choisir le technicien <span class="req">*</span></label>
+					<select name="do_tech" required>
+						<option value="">— Sélectionner un technicien —</option>
+						<option value="1">1. A. Mansouri</option>
+						<option value="2">2. S. Benali</option>
+						<option value="3">3. R. Kaddour</option>
+						<option value="4">4. M. Haddad</option>
+					</select>
+				</div>
+<div class="form-field full">
 					<label>Votre message <span class="req">*</span></label>
 					<textarea name="do_message" required="" placeholder="Ex : Fauteuil, autoclave…"></textarea>
 				</div>
