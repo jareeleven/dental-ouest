@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guide Telegram — Eleven Timer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#0b0e1f;color:#d7dbe8;min-height:100vh;padding:30px 16px;}
+.wrap{max-width:720px;margin:0 auto;}
+.card{background:linear-gradient(160deg,#12162b,#181f3d);border:1px solid rgba(200,168,75,.45);border-radius:18px;padding:36px 32px;box-shadow:0 0 60px rgba(64,140,255,.12),inset 0 0 40px rgba(10,14,30,.8);position:relative;text-align:center;}
+.card::before,.card::after{content:'';position:absolute;width:26px;height:26px;border-color:#C8A84B;border-style:solid;}
+.card::before{top:-1px;left:-1px;border-width:2px 0 0 2px;border-radius:18px 0 0 0;}
+.card::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;border-radius:0 0 18px 0;}
+.badge{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid #C8A84B;color:#e8c96a;font-size:11px;letter-spacing:3px;font-weight:700;margin-bottom:16px;}
+h1{color:#fff;font-size:24px;letter-spacing:.5px;margin-bottom:8px;}
+h1 span{color:#C8A84B;}
+.sub{font-size:13px;color:#9aa6c4;line-height:1.7;margin-bottom:24px;}
+
+.lang-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:26px;flex-wrap:wrap;}
+.lt{cursor:pointer;background:#0b0e1f;border:1px solid #2c3560;color:#9aa6c4;padding:9px 20px;border-radius:999px;font-size:13px;font-weight:700;transition:.25s;font-family:inherit;}
+.lt:hover{border-color:#C8A84B;color:#e8c96a;}
+.lt.active{background:linear-gradient(135deg,#C8A84B,#a47b3b);color:#141414;border-color:#C8A84B;}
+
+.lang{display:none;text-align:left;}
+.lang.active{display:block;}
+.lang[dir="rtl"]{text-align:right;}
+
+.part{margin-bottom:26px;}
+.part-title{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.part-num{flex:none;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#C8A84B,#a47b3b);color:#141414;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;}
+.part-title h2{color:#e8c96a;font-size:15px;letter-spacing:1px;text-transform:uppercase;}
+.steps{list-style:none;counter-reset:st;}
+.steps li{position:relative;padding:0 0 14px 46px;counter-increment:st;font-size:13.5px;color:#c7cfe4;line-height:1.75;}
+.lang[dir="rtl"] .steps li{padding:0 46px 14px 0;}
+.steps li::before{content:counter(st);position:absolute;top:1px;left:0;width:28px;height:28px;border-radius:50%;background:#1c2340;border:1px solid #39c6ff55;color:#7ee0ff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
+.lang[dir="rtl"] .steps li::before{left:auto;right:0;}
+.steps li:last-child{padding-bottom:0;}
+.steps b{color:#e8c96a;}
+.steps code{background:#0b1a2e;border:1px solid #2d5f8a;color:#7ee0ff;padding:2px 10px;border-radius:6px;font-family:Consolas,monospace;font-size:12.5px;direction:ltr;unicode-bidi:embed;display:inline-block;}
+.steps .warn{color:#ffb86b;font-weight:700;}
+.tok{color:#7CFC98 !important;font-weight:800;}
+
+.chat{background:#0b0e1f;border:1px solid #2a3153;border-radius:12px;padding:16px;margin:14px 0;}
+.chat-label{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:#8fa3c8;margin-bottom:10px;}
+.msg{max-width:85%;padding:9px 14px;border-radius:14px;font-size:12.5px;line-height:1.6;margin-bottom:8px;}
+.msg.bot{background:#182036;border:1px solid #2a3153;border-bottom-left-radius:4px;color:#c7cfe4;}
+.msg.you{background:#2b5278;border-bottom-right-radius:4px;color:#eaf2ff;margin-left:auto;text-align:right;}
+.lang[dir="rtl"] .msg.bot{margin-left:auto;border-bottom-left-radius:14px;border-bottom-right-radius:4px;text-align:right;}
+.lang[dir="rtl"] .msg.you{margin-left:0;margin-right:auto;border-bottom-right-radius:14px;border-bottom-left-radius:4px;text-align:left;}
+.msg .who{display:block;font-size:10px;color:#7ee0ff;letter-spacing:1px;margin-bottom:3px;}
+
+.trouble{background:#231322;border:1px dashed #7a4060;border-radius:12px;padding:18px 20px;margin-top:6px;}
+.trouble h3{color:#ff9db1;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.trouble ul{list-style:none;}
+.trouble li{font-size:13px;color:#d8c2cc;line-height:1.9;padding-inline-start:20px;position:relative;}
+.trouble li::before{content:'▸';position:absolute;inset-inline-start:0;color:#ff9db1;}
+.trouble b{color:#fff;}
+
+.security{margin-top:22px;background:#101a2e;border:1px solid #2d5f8a;border-radius:12px;padding:16px 20px;font-size:12.5px;color:#9fc6e8;line-height:1.8;text-align:center;}
+
+.back{display:inline-block;margin-top:26px;color:#8fa3c8;font-size:12px;text-decoration:none;letter-spacing:1px;}
+.back:hover{color:#C8A84B;}
+@media(max-width:600px){.card{padding:26px 18px;}h1{font-size:19px;}.msg{max-width:95%;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+	<span class="badge">📨 ELEVEN TIMER • GUIDE OFFICIEL</span>
+	<h1>Activer les alertes <span>Telegram</span> en 5 minutes</h1>
+	<p class="sub">Tutoriel pas à pas — aucune compétence technique requise.<br>Suivez simplement les étapes dans l'ordre.</p>
+
+	<div class="lang-tabs" role="tablist">
+		<button class="lt active" data-l="fr">🇫🇷 Français</button>
+		<button class="lt" data-l="en">🇬🇧 English</button>
+		<button class="lt" data-l="ar">🇩🇿 العربية</button>
+	</div>
+
+	<!-- ============ FRANÇAIS ============ -->
+	<section id="l-fr" class="lang active">
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">A</span><h2>Installer Telegram <small style="color:#8fa3c8;">(si ce n'est pas déjà fait)</small></h2></div>
+			<ol class="steps">
+				<li>Téléchargez l'application <b>Telegram</b> : sur <b>Play Store</b> (Android) ou <b>App Store</b> (iPhone). Sur ordinateur : rendez-vous sur <code>telegram.org</code>.</li>
+				<li>Ouvrez Telegram et créez votre compte avec votre <b>numéro de téléphone</b>. Vous recevrez un SMS de confirmation — c'est gratuit et sans abonnement.</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">B</span><h2>Créer votre robot (bot)</h2></div>
+			<ol class="steps">
+				<li>Dans la barre de recherche en haut de Telegram, tapez exactement : <code>@BotFather</code><br>C'est le robot officiel de Telegram — il possède un <b>badge bleu vérifié ✔️</b>. Ouvrez sa conversation.</li>
+				<li>Appuyez sur le bouton bleu <b>DÉMARRER</b> en bas de l'écran.</li>
+				<li>Envoyez-lui la commande : <code>/newbot</code></li>
+				<li>BotFather vous demande un <b>nom</b> pour votre bot. Écrivez par exemple : <code>Mon Timer Bot</code> <em>(ce nom est libre, personne ne le voit)</em>.</li>
+				<li>Puis il vous demande un <b>identifiant unique</b> qui doit obligatoirement se terminer par <code>_bot</code>. Par exemple : <code>timer_dental_bot</code></li>
+			</ol>
+			<div class="chat">
+				<div class="chat-label">Ce que vous verrez à l'écran</div>
+				<div class="msg you"><span class="who">VOUS</span>/newbot</div>
+				<div class="msg bot"><span class="who">BotFather ✔️</span>Alright, a new bot. How are we going to call it? Please give me a name for your bot.</div>
+				<div class="msg you"><span class="who">VOUS</span>Mon Timer Bot</div>
+				<div class="msg bot"><span class="who">BotFather ✔️</span>Good. Now let's choose a username for your bot. It must end in « bot ».</div>
+				<div class="msg you"><span class="who">VOUS</span>timer_dental_bot</div>
+				<div class="msg bot"><span class="who">BotFather ✔️</span>Done! Congratulations on your new bot. Use this token to access the HTTP API:<br><b class="tok">7123456789:AAHfLk9xQzW2mNoP4rStUvWyX1234567890</b></div>
+			</div>
+			<ol class="steps" start="6" style="counter-reset:st 5;">
+				<li>🎉 Le long numéro coloré ci-dessus est votre <b>TOKEN</b>. Copiez-le entièrement : <b>appui long dessus → Copier</b>. Conservez-le précieusement.</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">C</span><h2>Récupérer votre Chat ID</h2></div>
+			<ol class="steps">
+				<li>Dans la recherche Telegram, tapez : <code>@userinfobot</code></li>
+				<li>Ouvrez la conversation et appuyez sur <b>Démarrer</b>. Il répond immédiatement :</li>
+			</ol>
+			<div class="chat">
+				<div class="chat-label">Réponse automatique</div>
+				<div class="msg bot"><span class="who">@userinfobot</span><b>Id:</b> 771062122<br><b>First:</b> Abdeldjalil<br><b>Lang:</b> fr</div>
+			</div>
+			<ol class="steps" start="3" style="counter-reset:st 2;">
+				<li>Le numéro après <b>Id:</b> est votre <b>CHAT ID</b>. Notez-le.</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">D</span><h2>Activer votre bot <span class="warn">⚠️ étape oubliée n°1 !</span></h2></div>
+			<ol class="steps">
+				<li>Retournez dans la conversation du bot que <b>vous venez de créer</b> (étape B). Cherchez son identifiant, ex : <code>timer_dental_bot</code>, ou cliquez directement sur le lien que BotFather a envoyé (<code>t.me/timer_dental_bot</code>).</li>
+				<li>Appuyez sur le gros bouton bleu <b>DÉMARRER</b> en bas.<br><span class="warn">⚠️ Obligatoire :</span> tant que vous n'avez pas appuyé sur DÉMARRER, Telegram interdit au bot de vous écrire. C'est la cause n°1 des messages qui n'arrivent pas !</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">E</span><h2>Configuration finale dans WordPress</h2></div>
+			<ol class="steps">
+				<li>Connectez-vous à votre tableau de bord WordPress, puis ouvrez le menu <b>⏳ Eleven Timer</b>.</li>
+				<li>Collez le <b>TOKEN</b> (partie B) dans le champ <b>« Token du bot Telegram »</b>.</li>
+				<li>Collez votre <b>CHAT ID</b> (partie C) dans le champ <b>« Chat ID Telegram »</b>.</li>
+				<li>Cliquez sur <b>💾 ENREGISTRER LES RÉGLAGES</b>.</li>
+				<li>Cliquez sur <b>📱 TEST WHATSAPP / TELEGRAM</b> → dans 2 secondes, vous recevez le message de test sur Telegram. ✅ C'est terminé !</li>
+			</ol>
+		</div>
+
+		<div class="trouble">
+			<h3>🛠 Dépannage — ça ne marche pas ?</h3>
+			<ul>
+				<li><b>Aucun message reçu</b> → Vous avez oublié le bouton <b>DÉMARRER</b> (partie D). C'est le cas dans 9 fois sur 10.</li>
+				<li><b>Erreur « Unauthorized »</b> → Le TOKEN est mal copié (espace en trop ou bout manquant). Recopiez-le depuis BotFather.</li>
+				<li><b>Erreur « chat not found »</b> → Le CHAT ID est incorrect. Refaites la partie C.</li>
+				<li><b>Vous avez changé de téléphone ?</b> → Rien à faire, Telegram fonctionne avec votre numéro, pas votre appareil.</li>
+			</ul>
+		</div>
+
+		<div class="security">🔒 <b>Sécurité :</b> ne partagez <b>jamais</b> votre TOKEN — il donne le contrôle total de votre bot. En cas de doute, demandez-en un nouveau à @BotFather avec <code>/token</code>.</div>
+		<a class="back" href="plugin-timer.html">← Retour au plugin Eleven Timer</a>
+	</section>
+
+	<!-- ============ ENGLISH ============ -->
+	<section id="l-en" class="lang" dir="ltr">
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">A</span><h2>Install Telegram <small style="color:#8fa3c8;">(if not already done)</small></h2></div>
+			<ol class="steps">
+				<li>Download the <b>Telegram</b> app from the <b>Play Store</b> (Android) or <b>App Store</b> (iPhone). On computer: go to <code>telegram.org</code>.</li>
+				<li>Open Telegram and create your account with your <b>phone number</b>. You will receive a confirmation SMS — it is free, no subscription needed.</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">B</span><h2>Create your bot</h2></div>
+			<ol class="steps">
+				<li>In the search bar at the top of Telegram, type exactly: <code>@BotFather</code><br>This is Telegram's official bot — it has a <b>verified blue badge ✔️</b>. Open the chat.</li>
+				<li>Tap the blue <b>START</b> button at the bottom of the screen.</li>
+				<li>Send the command: <code>/newbot</code></li>
+				<li>BotFather asks for a <b>name</b> for your bot. Type for example: <code>My Timer Bot</code> <em>(any name works)</em>.</li>
+				<li>Then it asks for a <b>unique username</b> that must end with <code>_bot</code>. For example: <code>timer_dental_bot</code></li>
+			</ol>
+			<div class="chat">
+				<div class="chat-label">What you will see on screen</div>
+				<div class="msg you"><span class="who">YOU</span>/newbot</div>
+				<div class="msg bot"><span class="who">BotFather ✔️</span>Alright, a new bot. How are we going to call it? Please give me a name for your bot.</div>
+				<div class="msg you"><span class="who">YOU</span>My Timer Bot</div>
+				<div class="msg bot"><span class="who">BotFather ✔️</span>Good. Now let's choose a username for your bot. It must end in « bot ».</div>
+				<div class="msg you"><span class="who">YOU</span>timer_dental_bot</div>
+				<div class="msg bot"><span class="who">BotFather ✔️</span>Done! Congratulations on your new bot. Use this token to access the HTTP API:<br><b class="tok">7123456789:AAHfLk9xQzW2mNoP4rStUvWyX1234567890</b></div>
+			</div>
+			<ol class="steps" start="6" style="counter-reset:st 5;">
+				<li>🎉 The long colored number above is your <b>TOKEN</b>. Copy all of it: <b>long-press → Copy</b>. Keep it safe.</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">C</span><h2>Get your Chat ID</h2></div>
+			<ol class="steps">
+				<li>In the Telegram search bar, type: <code>@userinfobot</code></li>
+				<li>Open the chat and tap <b>Start</b>. It replies instantly:</li>
+			</ol>
+			<div class="chat">
+				<div class="chat-label">Automatic reply</div>
+				<div class="msg bot"><span class="who">@userinfobot</span><b>Id:</b> 771062122<br><b>First:</b> Abdeldjalil<br><b>Lang:</b> fr</div>
+			</div>
+			<ol class="steps" start="3" style="counter-reset:st 2;">
+				<li>The number after <b>Id:</b> is your <b>CHAT ID</b>. Write it down.</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">D</span><h2>Activate your bot <span class="warn">⚠️ most forgotten step!</span></h2></div>
+			<ol class="steps">
+				<li>Go back to the conversation with the bot <b>you just created</b> (step B). Search for its username, e.g. <code>timer_dental_bot</code>, or click the link BotFather sent (<code>t.me/timer_dental_bot</code>).</li>
+				<li>Tap the big blue <b>START</b> button at the bottom.<br><span class="warn">⚠️ Mandatory:</span> until you press START, Telegram forbids the bot from messaging you. This is the #1 reason messages never arrive!</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">E</span><h2>Final setup in WordPress</h2></div>
+			<ol class="steps">
+				<li>Log in to your WordPress dashboard, then open the <b>⏳ Eleven Timer</b> menu.</li>
+				<li>Paste the <b>TOKEN</b> (part B) into the <b>“Token du bot Telegram”</b> field.</li>
+				<li>Paste your <b>CHAT ID</b> (part C) into the <b>“Chat ID Telegram”</b> field.</li>
+				<li>Click <b>💾 ENREGISTRER LES RÉGLAGES</b> (Save settings).</li>
+				<li>Click <b>📱 TEST WHATSAPP / TELEGRAM</b> → within 2 seconds you receive the test message on Telegram. ✅ Done!</li>
+			</ol>
+		</div>
+
+		<div class="trouble">
+			<h3>🛠 Troubleshooting — not working?</h3>
+			<ul>
+				<li><b>No message received</b> → You skipped the <b>START</b> button (part D). This causes 9 out of 10 issues.</li>
+				<li><b>“Unauthorized” error</b> → The TOKEN was copied incorrectly (extra space or missing part). Re-copy it from BotFather.</li>
+				<li><b>“Chat not found” error</b> → The CHAT ID is wrong. Redo part C.</li>
+				<li><b>Changed phone?</b> → Nothing to do — Telegram works with your number, not your device.</li>
+			</ul>
+		</div>
+
+		<div class="security">🔒 <b>Security:</b> never share your TOKEN — it gives full control of your bot. If in doubt, ask @BotFather for a new one with <code>/token</code>.</div>
+		<a class="back" href="plugin-timer.html">← Back to Eleven Timer plugin</a>
+	</section>
+
+	<!-- ============ العربية ============ -->
+	<section id="l-ar" class="lang" dir="rtl" lang="ar">
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">أ</span><h2>تثبيت تيليجرام <small style="color:#8fa3c8;">(إذا لم يكن مثبتاً بعد)</small></h2></div>
+			<ol class="steps">
+				<li>حمّل تطبيق <b>تيليجرام</b> من <b>متجر Play</b> (أندرويد) أو <b>App Store</b> (آيفون). على الحاسوب: ادخل إلى <code>telegram.org</code>.</li>
+				<li>افتح التطبيق وأنشئ حسابك برقم <b>هاتفك</b>. ستصلك رسالة تأكيد — الخدمة مجانية تماماً.</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">ب</span><h2>إنشاء البوت الخاص بك</h2></div>
+			<ol class="steps">
+				<li>في شريط البحث أعلى تيليجرام، اكتب بالضبط: <code>@BotFather</code><br>هذا هو البوت الرسمي لتيليجرام — لديه <b>شارة توثيق زرقاء ✔️</b>. افتح محادثته.</li>
+				<li>اضغط الزر الأزرق <b>START / ابدأ</b> في أسفل الشاشة.</li>
+				<li>أرسل له الأمر: <code>/newbot</code></li>
+				<li>سيطلب منك <b>اسماً</b> للبوت. اكتب مثلاً: <code>Mon Timer Bot</code> <em>(الاسم حر، لا أحد يراه)</em>.</li>
+				<li>ثم سيطلب <b>معرّفاً فريداً</b> يجب أن ينتهي بـ <code>_bot</code>. مثلاً: <code>timer_dental_bot</code></li>
+			</ol>
+			<div class="chat">
+				<div class="chat-label">ما ستراه على الشاشة</div>
+				<div class="msg you"><span class="who">أنت</span>/newbot</div>
+				<div class="msg bot"><span class="who">BotFather ✔️</span>Alright, a new bot. How are we going to call it? Please give me a name for your bot.</div>
+				<div class="msg you"><span class="who">أنت</span>Mon Timer Bot</div>
+				<div class="msg bot"><span class="who">BotFather ✔️</span>Good. Now let's choose a username for your bot. It must end in « bot ».</div>
+				<div class="msg you"><span class="who">أنت</span>timer_dental_bot</div>
+				<div class="msg bot"><span class="who">BotFather ✔️</span>Done! Congratulations on your new bot. Use this token to access the HTTP API:<br><b class="tok">7123456789:AAHfLk9xQzW2mNoP4rStUvWyX1234567890</b></div>
+			</div>
+			<ol class="steps" start="6" style="counter-reset:st 5;">
+				<li>🎉 الرقم الطويل الملوّن أعلاه هو <b>التوكن (TOKEN)</b> الخاص بك. انسخه بالكامل: <b>ضغطة مطولة ← نسخ</b>. احتفظ به في مكان آمن.</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">ج</span><h2>معرفة رقم المحادثة (Chat ID)</h2></div>
+			<ol class="steps">
+				<li>في البحث اكتب: <code>@userinfobot</code></li>
+				<li>افتح المحادثة واضغط <b>ابدأ</b>. سيرد عليك فوراً:</li>
+			</ol>
+			<div class="chat">
+				<div class="chat-label">الرد الآلي</div>
+				<div class="msg bot"><span class="who">@userinfobot</span><b>Id:</b> 771062122<br><b>First:</b> Abdeldjalil<br><b>Lang:</b> ar</div>
+			</div>
+			<ol class="steps" start="3" style="counter-reset:st 2;">
+				<li>الرقم الذي بعد <b>Id:</b> هو <b>الـ CHAT ID</b> خاصتك. دوّنه.</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">د</span><h2>تشغيل البوت <span class="warn">⚠️ أكثر خطوة تُنسى!</span></h2></div>
+			<ol class="steps">
+				<li>عد إلى محادثة البوت الذي <b>أنشأته للتو</b> (الخطوة ب). ابحث عن معرّفه، مثل: <code>timer_dental_bot</code>، أو انقر على الرابط الذي أرسله لك BotFather (<code>t.me/timer_dental_bot</code>).</li>
+				<li>اضغط الزر الأزرق الكبير <b>START</b> في الأسفل.<br><span class="warn">⚠️ إلزامي:</span> طالما لم تضغط START، يمنع تيليجرام البوت من مراسلتك. هذا هو السبب الأول لعدم وصول الرسائل!</li>
+			</ol>
+		</div>
+
+		<div class="part">
+			<div class="part-title"><span class="part-num">هـ</span><h2>الإعداد النهائي في ووردبريس</h2></div>
+			<ol class="steps">
+				<li>ادخل إلى لوحة تحكم ووردبريس، ثم افتح قائمة <b>⏳ Eleven Timer</b>.</li>
+				<li>الصق <b>التوكن</b> (الخطوة ب) في خانة <b>« Token du bot Telegram »</b>.</li>
+				<li>الصق <b>الـ CHAT ID</b> (الخطوة ج) في خانة <b>« Chat ID Telegram »</b>.</li>
+				<li>اضغط <b>💾 حفظ الإعدادات</b>.</li>
+				<li>اضغط زر <b>📱 TEST WHATSAPP / TELEGRAM</b> ← خلال ثانيتين تصلك رسالة الاختبار. ✅ تم بنجاح!</li>
+			</ol>
+		</div>
+
+		<div class="trouble">
+			<h3>🛠 حل المشاكل — لا تعمل؟</h3>
+			<ul>
+				<li><b>لم تصلك أي رسالة</b> ← نسيت زر <b>START</b> (الخطوة د). هذه مشكلة 9 من كل 10 حالات.</li>
+				<li><b>خطأ « Unauthorized »</b> ← التوكن منسوخ بشكل خاطئ (فراغ زائد أو جزء ناقص). انسخه من جديد.</li>
+				<li><b>خطأ « chat not found »</b> ← الـ CHAT ID غير صحيح. أعد الخطوة ج.</li>
+				<li><b>غيّرت هاتفك؟</b> ← لا شيء مطلوب — تيليجرام يعمل برقمك وليس بجهازك.</li>
+			</ul>
+		</div>
+
+		<div class="security">🔒 <b>الأمان:</b> لا تشارك <b>التوكن أبداً</b> مع أحد — فهو يمنح تحكماً كاملاً ببوتك. عند الشك، اطلب توكن جديداً من @BotFather عبر <code>/token</code>.</div>
+		<a class="back" href="plugin-timer.html">← العودة إلى صفحة الإضافة</a>
+	</section>
+</div>
+</div>
+
+<script>
+(function () {
+	var btns = document.querySelectorAll('.lt');
+	btns.forEach(function (b) {
+		b.addEventListener('click', function () {
+			btns.forEach(function (x) { x.classList.remove('active'); });
+			b.classList.add('active');
+			document.querySelectorAll('.lang').forEach(function (s) { s.classList.remove('active'); });
+			document.getElementById('l-' + b.getAttribute('data-l')).classList.add('active');
+		});
+	});
+})();
+</script>
+</body>
+</html>
