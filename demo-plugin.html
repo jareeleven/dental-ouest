@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Démo — Plugin Hébergement Timer ProvenceTour</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:#070a16;color:#d7dbe8;min-height:100vh;}
+.demo-hero{max-width:860px;margin:0 auto;padding:60px 24px 30px;text-align:center;}
+.demo-hero h1{font-family:'Orbitron',sans-serif;color:#fff;font-size:clamp(20px,4vw,30px);letter-spacing:2px;}
+.demo-hero h1 span{color:#C8A84B;}
+.demo-hero p{color:#9aa6c4;font-size:14px;line-height:1.7;max-width:560px;margin:14px auto 0;}
+.demo-hint{display:inline-block;margin-top:22px;padding:10px 22px;border-radius:999px;border:1px dashed #C8A84B;color:#e8c96a;font-size:13px;letter-spacing:1px;animation:pulse-hint 2s ease-in-out infinite;}
+@keyframes pulse-hint{0%,100%{opacity:.7;}50%{opacity:1;}}
+.demo-note{max-width:860px;margin:26px auto;padding:0 24px;text-align:center;font-size:11px;color:#5d6785;letter-spacing:1px;}
+.back{display:inline-block;margin-top:18px;color:#8fa3c8;font-size:12px;text-decoration:none;letter-spacing:1px;}
+.back:hover{color:#C8A84B;}
+
+/* ===== CSS EXACT DU PLUGIN ProvenceTour Hebergement Timer v4.0 ===== */
+#ptimer-badge{position:fixed;bottom:12px;right:12px;width:24px;height:24px;border-radius:50%;background:rgba(10,13,26,.55);border:1px solid rgba(232,201,106,.4);color:#e8c96a;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:999998;cursor:pointer;opacity:.3;transition:.3s;backdrop-filter:blur(3px);user-select:none;}
+#ptimer-badge:hover{opacity:1;transform:scale(1.2);box-shadow:0 0 14px rgba(232,201,106,.65);}
+@media(max-width:600px){#ptimer-badge{width:20px;height:20px;font-size:9px;bottom:10px;right:10px;}}
+
+.ptimer-modal{position:fixed;top:0;left:0;right:0;bottom:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:rgba(3,5,14,.92);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:.35s ease;}
+.ptimer-modal.is-open{opacity:1;visibility:visible;}
+
+.ptimer-pwd-box{position:relative;width:min(340px,92vw);background:linear-gradient(160deg,#10142a,#181f3d);border:1px solid rgba(202,162,63,.5);border-radius:16px;padding:30px 26px;text-align:center;font-family:'Orbitron','Segoe UI',monospace;color:#eaf0ff;box-shadow:0 0 50px rgba(202,162,63,.15);transform:scale(.94);transition:.3s;}
+.ptimer-modal.is-open .ptimer-pwd-box{transform:none;}
+.ptimer-pwd-icon{font-size:30px;}
+.ptimer-pwd-box h3{margin:10px 0 6px;font-size:15px;letter-spacing:3px;color:#e8c96a;}
+.ptimer-pwd-box p{font-size:11px;color:#9aa6c4;line-height:1.6;margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;}
+#ptimer-pwd-input{width:100%;box-sizing:border-box;background:#0b0e1f;border:1px solid #2c3560;border-radius:8px;padding:12px;color:#fff;font-size:15px;text-align:center;letter-spacing:3px;outline:none;transition:.25s;}
+#ptimer-pwd-input:focus{border-color:#e8c96a;box-shadow:0 0 12px rgba(232,201,106,.35);}
+#ptimer-pwd-btn{width:100%;margin-top:14px;background:linear-gradient(135deg,#caa23f,#a47b3b);border:none;border-radius:8px;padding:12px;color:#141414;font-weight:700;font-size:12px;letter-spacing:2px;cursor:pointer;transition:.25s;font-family:inherit;}
+#ptimer-pwd-btn:hover{filter:brightness(1.15);box-shadow:0 0 16px rgba(232,201,106,.5);}
+#ptimer-pwd-btn:disabled{opacity:.5;cursor:not-allowed;}
+#ptimer-pwd-msg{min-height:16px;margin-top:10px;font-size:10px;color:#ff7676;letter-spacing:1px;}
+.ptimer-shake{animation:ptshake .4s;}
+@keyframes ptshake{0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}40%{transform:translateX(8px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);}}
+
+.ptimer-x{position:absolute;top:8px;right:12px;background:none;border:none;color:#8fa3c8;font-size:22px;cursor:pointer;line-height:1;z-index:2;}
+.ptimer-x:hover{color:#fff;}
+
+.ptimer-stars{position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;pointer-events:none;}
+.ptimer-stars span{position:absolute;background:#fff;border-radius:50%;opacity:.1;animation:pttwinkle linear infinite;}
+@keyframes pttwinkle{0%,100%{opacity:.05;}50%{opacity:.9;}}
+
+.ptimer-card{position:relative;width:min(700px,94vw);max-height:94vh;overflow:auto;background:linear-gradient(160deg,#0d1122,#161c36 55%,#0d1122);border:1px solid rgba(202,162,63,.45);border-radius:18px;padding:34px 34px 22px;text-align:center;font-family:'Orbitron','Segoe UI',monospace;color:#eaf0ff;box-shadow:0 0 60px rgba(64,140,255,.15),0 0 120px rgba(202,162,63,.08),inset 0 0 40px rgba(10,14,30,.8);transform:translateY(24px) scale(.96);transition:.4s cubic-bezier(.2,.9,.25,1.2);}
+.ptimer-modal.is-open .ptimer-card{transform:none;}
+.ptimer-card::before,.ptimer-card::after{content:'';position:absolute;width:26px;height:26px;border-color:#e8c96a;border-style:solid;}
+.ptimer-card::before{top:-1px;left:-1px;border-width:2px 0 0 2px;border-radius:18px 0 0 0;}
+.ptimer-card::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;border-radius:0 0 18px 0;}
+
+.ptimer-reactor{position:relative;width:74px;height:74px;margin:0 auto 10px;}
+.ptimer-reactor .ring{position:absolute;top:0;left:0;right:0;bottom:0;border-radius:50%;border:2px dashed rgba(232,201,106,.55);}
+.ptimer-reactor .r1{animation:ptspin 9s linear infinite;}
+.ptimer-reactor .r2{top:10px;left:10px;right:10px;bottom:10px;border-color:rgba(126,240,255,.5);animation:ptspin 6s linear infinite reverse;}
+.ptimer-reactor .core{position:absolute;top:28px;left:28px;right:28px;bottom:28px;border-radius:50%;background:radial-gradient(circle,#bff3ff,#39c6ff 55%,rgba(57,198,255,0));box-shadow:0 0 18px #39c6ff;animation:ptpulse 2.2s ease-in-out infinite;}
+@keyframes ptspin{to{transform:rotate(360deg);}}
+@keyframes ptpulse{0%,100%{transform:scale(1);opacity:.85;}50%{transform:scale(1.25);opacity:1;}}
+
+.ptimer-sub{font-size:9px;letter-spacing:4px;color:#8fa3c8;}
+.ptimer-head h2{margin:6px 0 0;font-size:clamp(15px,3vw,21px);letter-spacing:3px;color:#fff;text-shadow:0 0 20px rgba(232,201,106,.4);}
+.ptimer-statusline{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap;}
+.ptimer-pill{display:inline-block;padding:5px 14px;border-radius:999px;font-size:10px;letter-spacing:2px;border:1px solid currentColor;font-weight:700;}
+#ptimer-site{font-size:10px;color:#8fa3c8;letter-spacing:1px;}
+
+.ptimer-grid{display:flex;justify-content:center;align-items:flex-end;gap:6px;margin:20px 0 6px;}
+.ptimer-grid .unit{min-width:70px;}
+.ptimer-grid .val{font-size:clamp(30px,7vw,56px);font-weight:900;line-height:1;color:#eaf6ff;text-shadow:0 0 18px rgba(126,240,255,.55);}
+.ptimer-grid .lbl{font-size:9px;letter-spacing:3px;color:#8fa3c8;margin-top:8px;}
+.ptimer-grid .sep{font-size:clamp(22px,5vw,40px);color:#e8c96a;padding-bottom:22px;opacity:.8;}
+
+.ptimer-card.lvl-ok .val{text-shadow:0 0 18px rgba(87,227,137,.65);}
+.ptimer-card.lvl-warn .val{text-shadow:0 0 18px rgba(255,215,106,.65);}
+.ptimer-card.lvl-alert .val{text-shadow:0 0 18px rgba(255,161,74,.75);}
+.ptimer-card.lvl-crit .val{text-shadow:0 0 22px rgba(255,93,93,.85);}
+.ptimer-card.expired .val{color:#ff5d5d;text-shadow:0 0 22px rgba(255,93,93,.9);animation:ptblink 1s steps(2) infinite;}
+@keyframes ptblink{50%{opacity:.35;}}
+
+.ptimer-progress{height:8px;border-radius:99px;background:#1c2340;border:1px solid #2a3153;overflow:hidden;margin:16px 0 8px;}
+.ptimer-progress .bar{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#39c6ff,#e8c96a);box-shadow:0 0 12px rgba(57,198,255,.7);transition:width .6s ease;}
+.ptimer-meta{display:flex;justify-content:space-between;gap:10px;font-size:9px;letter-spacing:1px;color:#8fa3c8;flex-wrap:wrap;}
+.ptimer-foot{margin-top:18px;padding-top:12px;border-top:1px solid #232a4a;font-size:8px;letter-spacing:3px;color:#5d6785;}
+
+@media(max-width:520px){
+.ptimer-card{padding:26px 14px 16px;}
+.ptimer-grid .unit{min-width:56px;}
+.ptimer-grid .sep{padding-bottom:16px;}
+}
+</style>
+</head>
+<body>
+
+<div class="demo-hero">
+	<h1>🛰️ DÉMO DU PLUGIN <span>HÉBERGEMENT TIMER</span></h1>
+	<p>Cette page reproduit fidèlement le rendu réel du plugin ProvenceTour v4.0 une fois installé sur un site WordPress. Le mot de passe de démo est le même que celui du plugin.</p>
+	<span class="demo-hint">👆 Cliquez sur l'icône « T » en bas à droite de l'écran</span><br>
+	<a class="back" href="plugin-timer.html">← Page de téléchargement du plugin</a>
+</div>
+<div class="demo-note">Démo statique — sur WordPress, les données (dates, statut) proviennent du panneau d'administration et le mot de passe est vérifié côté serveur.</div>
+
+<!-- ===== HTML EXACT DU PLUGIN ===== -->
+<div id="ptimer-badge" title="Timer hébergement">T</div>
+
+<div id="ptimer-pwd-modal" class="ptimer-modal">
+	<div class="ptimer-pwd-box" id="ptimer-pwd-box">
+		<button class="ptimer-x" data-ptimer-close>&times;</button>
+		<div class="ptimer-pwd-icon">🔒</div>
+		<h3>ACCÈS SÉCURISÉ</h3>
+		<p>Zone réservée au propriétaire du site.<br>Entrez le mot de passe pour afficher le timer.</p>
+		<input type="password" id="ptimer-pwd-input" placeholder="••••••••••" autocomplete="off">
+		<div id="ptimer-pwd-msg"></div>
+		<button id="ptimer-pwd-btn">AUTHENTIFIER</button>
+	</div>
+</div>
+
+<div id="ptimer-timer-modal" class="ptimer-modal">
+	<div class="ptimer-stars" id="ptimer-stars"></div>
+	<div class="ptimer-card lvl-ok" id="ptimer-card">
+		<button class="ptimer-x" data-ptimer-close>&times;</button>
+		<div class="ptimer-reactor"><span class="ring r1"></span><span class="ring r2"></span><span class="core"></span></div>
+		<div class="ptimer-head">
+			<div class="ptimer-sub">PROVENCETOUR DZ • SYSTÈME DE SURVEILLANCE</div>
+			<h2>SURVEILLANCE D'HÉBERGEMENT</h2>
+		</div>
+		<div class="ptimer-statusline">
+			<span id="ptimer-pill" class="ptimer-pill" style="color:#57e389;">—</span>
+			<span id="ptimer-site">Dental Ouest</span>
+		</div>
+		<div class="ptimer-grid">
+			<div class="unit"><div class="val" id="ptimer-d">--</div><div class="lbl">JOURS</div></div>
+			<div class="sep">:</div>
+			<div class="unit"><div class="val" id="ptimer-h">--</div><div class="lbl">HEURES</div></div>
+			<div class="sep">:</div>
+			<div class="unit"><div class="val" id="ptimer-m">--</div><div class="lbl">MINUTES</div></div>
+			<div class="sep">:</div>
+			<div class="unit"><div class="val" id="ptimer-s">--</div><div class="lbl">SECONDES</div></div>
+		</div>
+		<div class="ptimer-progress"><div class="bar" id="ptimer-bar"></div></div>
+		<div class="ptimer-meta">
+			<span id="ptimer-bar-label">—</span>
+			<span>Début : 01/01/2026 • Fin : 31/12/2026</span>
+		</div>
+		<div class="ptimer-foot">SYSTÈME PROVENCETOUR • ACCÈS VÉRIFIÉ ✓</div>
+	</div>
+</div>
+
+<script>
+(function () {
+	var DEMO_PASSWORD = 'Eleven1975@';
+	var START_TS = Math.floor(new Date('2026-01-01T00:00:00').getTime() / 1000);
+	var END_TS = Math.floor(new Date('2026-12-31T23:59:59').getTime() / 1000);
+
+	var badge = document.getElementById('ptimer-badge');
+	var pwdModal = document.getElementById('ptimer-pwd-modal');
+	var timerModal = document.getElementById('ptimer-timer-modal');
+	var pwdBox = document.getElementById('ptimer-pwd-box');
+	var input = document.getElementById('ptimer-pwd-input');
+	var msg = document.getElementById('ptimer-pwd-msg');
+	var btn = document.getElementById('ptimer-pwd-btn');
+	var timerId = null;
+
+	function open(m) { m.classList.add('is-open'); }
+	function close(m) {
+		m.classList.remove('is-open');
+		if (m === timerModal && timerId) { clearInterval(timerId); timerId = null; }
+	}
+
+	badge.addEventListener('click', function () {
+		msg.textContent = '';
+		input.value = '';
+		btn.disabled = false;
+		open(pwdModal);
+		setTimeout(function () { input.focus(); }, 200);
+	});
+
+	Array.prototype.forEach.call(document.querySelectorAll('[data-ptimer-close]'), function (b) {
+		b.addEventListener('click', function () { close(b.closest('.ptimer-modal')); });
+	});
+
+	[pwdModal, timerModal].forEach(function (m) {
+		m.addEventListener('click', function (e) { if (e.target === m) close(m); });
+	});
+
+	document.addEventListener('keydown', function (e) {
+		if (e.key === 'Escape') { close(pwdModal); close(timerModal); }
+	});
+
+	function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+	function tick(data) {
+		var card = document.getElementById('ptimer-card');
+		var pill = document.getElementById('ptimer-pill');
+		var now = Date.now();
+		var end = data.end_ts * 1000;
+		var diff = end - now;
+		var elD = document.getElementById('ptimer-d');
+		var elH = document.getElementById('ptimer-h');
+		var elM = document.getElementById('ptimer-m');
+		var elS = document.getElementById('ptimer-s');
+
+		if (diff <= 0) {
+			elD.textContent = '0'; elH.textContent = '00'; elM.textContent = '00'; elS.textContent = '00';
+			card.classList.add('expired');
+			card.classList.remove('lvl-ok', 'lvl-warn', 'lvl-alert', 'lvl-crit');
+			pill.textContent = '⚠ EXPIRÉ';
+			pill.style.color = '#ff5d5d';
+			document.getElementById('ptimer-bar').style.width = '100%';
+			document.getElementById('ptimer-bar-label').textContent = '100% consommé';
+			return;
+		}
+		card.classList.remove('expired');
+
+		var s = Math.floor(diff / 1000);
+		var d = Math.floor(s / 86400); s -= d * 86400;
+		var h = Math.floor(s / 3600); s -= h * 3600;
+		var m = Math.floor(s / 60); s -= m * 60;
+
+		elD.textContent = d;
+		elH.textContent = pad(h);
+		elM.textContent = pad(m);
+		elS.textContent = pad(s);
+
+		card.classList.remove('lvl-ok', 'lvl-warn', 'lvl-alert', 'lvl-crit');
+		var lvl = d <= 7 ? 'lvl-crit' : d <= 30 ? 'lvl-alert' : d <= 90 ? 'lvl-warn' : 'lvl-ok';
+		card.classList.add(lvl);
+
+		var map = {
+			'lvl-ok': ['✔ OPÉRATIONNEL', '#57e389'],
+			'lvl-warn': ['◐ ATTENTION', '#ffd76a'],
+			'lvl-alert': ['▲ ALERTE', '#ffa14a'],
+			'lvl-crit': ['● CRITIQUE', '#ff5d5d']
+		};
+		pill.textContent = map[lvl][0];
+		pill.style.color = map[lvl][1];
+
+		var st = data.start_ts * 1000;
+		var pct = (st && end > st) ? Math.min(100, Math.max(0, (now - st) / (end - st) * 100)) : 0;
+		document.getElementById('ptimer-bar').style.width = pct + '%';
+		document.getElementById('ptimer-bar-label').textContent = pct.toFixed(1) + '% consommé';
+	}
+
+	function buildStars() {
+		var c = document.getElementById('ptimer-stars');
+		if (c.getAttribute('data-done')) return;
+		c.setAttribute('data-done', '1');
+		for (var i = 0; i < 90; i++) {
+			var sp = document.createElement('span');
+			sp.style.left = (Math.random() * 100) + '%';
+			sp.style.top = (Math.random() * 100) + '%';
+			var sz = Math.random() * 2 + 1;
+			sp.style.width = sz + 'px';
+			sp.style.height = sz + 'px';
+			sp.style.animationDuration = (Math.random() * 3 + 2) + 's';
+			sp.style.animationDelay = (Math.random() * 4) + 's';
+			c.appendChild(sp);
+		}
+	}
+
+	function submitPwd() {
+		var pwd = input.value;
+		if (!pwd) { input.focus(); return; }
+
+		if (pwd !== DEMO_PASSWORD) {
+			msg.textContent = 'Mot de passe incorrect.';
+			pwdBox.classList.remove('ptimer-shake');
+			void pwdBox.offsetWidth;
+			pwdBox.classList.add('ptimer-shake');
+			input.value = '';
+			input.focus();
+			return;
+		}
+
+		msg.textContent = '';
+		close(pwdModal);
+		buildStars();
+		open(timerModal);
+		var data = { start_ts: START_TS, end_ts: END_TS };
+		clearInterval(timerId);
+		tick(data);
+		timerId = setInterval(function () { tick(data); }, 1000);
+	}
+
+	btn.addEventListener('click', submitPwd);
+	input.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitPwd(); });
+})();
+</script>
+
+</body>
+</html>
