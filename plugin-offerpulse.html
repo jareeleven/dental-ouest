@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plugin OfferPulse — Offres Dynamiques</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0b0e1f;color:#d7dbe8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.card{max-width:660px;width:100%;background:linear-gradient(160deg,#12162b,#181f3d);border:1px solid rgba(200,168,75,.45);border-radius:18px;padding:40px 36px;text-align:center;box-shadow:0 0 60px rgba(64,140,255,.12),inset 0 0 40px rgba(10,14,30,.8);position:relative;}
+.card::before,.card::after{content:'';position:absolute;width:26px;height:26px;border-color:#C8A84B;border-style:solid;}
+.card::before{top:-1px;left:-1px;border-width:2px 0 0 2px;border-radius:18px 0 0 0;}
+.card::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;border-radius:0 0 18px 0;}
+.badge{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid #C8A84B;color:#e8c96a;font-size:11px;letter-spacing:3px;font-weight:700;margin-bottom:18px;}
+h1{color:#fff;font-size:24px;letter-spacing:1px;margin-bottom:10px;}
+h1 span{color:#C8A84B;}
+.sub{font-size:14px;color:#9aa6c4;line-height:1.7;margin-bottom:26px;}
+.features{text-align:left;background:#0b0e1f;border:1px solid #2a3153;border-radius:12px;padding:20px 22px;margin-bottom:28px;}
+.features li{list-style:none;font-size:13px;color:#c7cfe4;line-height:2;}
+.features li b{color:#e8c96a;}
+.btn-dl{display:inline-block;background:linear-gradient(135deg,#C8A84B,#a47b3b);color:#141414;font-weight:800;font-size:15px;letter-spacing:1px;text-decoration:none;padding:16px 42px;border-radius:10px;transition:.25s;box-shadow:0 4px 20px rgba(200,168,75,.35);}
+.btn-dl:hover{filter:brightness(1.15);transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,168,75,.5);}
+.meta{margin-top:14px;font-size:11px;color:#8fa3c8;letter-spacing:1px;}
+.steps{text-align:left;background:#0f1428;border:1px dashed #2c3560;border-radius:12px;padding:20px 22px;margin-top:28px;}
+.steps h3{color:#e8c96a;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+.steps ol{padding-left:20px;font-size:13px;color:#c7cfe4;line-height:2;}
+.demo-btn{display:inline-block;margin-top:16px;padding:13px 34px;border-radius:10px;border:1px solid #39c6ff;color:#7ee0ff;font-weight:700;font-size:13px;letter-spacing:1px;text-decoration:none;transition:.25s;}
+.demo-btn:hover{background:rgba(57,198,255,.12);}
+.back{display:inline-block;margin-top:22px;color:#8fa3c8;font-size:12px;text-decoration:none;letter-spacing:1px;}
+.back:hover{color:#C8A84B;}
+</style>
+</head>
+<body>
+<div class="card">
+	<span class="badge">⚡ OFFERPULSE • v1.0</span>
+	<h1>Plugin <span>OfferPulse</span> — Offres Dynamiques</h1>
+	<p class="sub">Icône flottante futuriste pour vos promotions : elle ne gêne jamais le site, se déplace, s'efface au défilement et évite les autres widgets. Popup premium aux couleurs de votre marque.</p>
+
+	<ul class="features">
+		<li>🛰️ &nbsp;<b>Icône orbite animée</b> — anneau rotatif, halo pulsant, badge du nombre d'offres</li>
+		<li>🖱️ &nbsp;<b>Déplaçable</b> — le visiteur la glisse où il veut (position mémorisée)</li>
+		<li>🧠 &nbsp;<b>Anti-collision intelligente</b> — s'empile au-dessus des chats et widgets flottants</li>
+		<li>👻 &nbsp;<b>S'efface au défilement</b> — revient dès la remontée : zéro gêne de lecture</li>
+		<li>⏳ &nbsp;<b>Compte à rebours par offre</b> — J-45, J-2 clignotant, 🔥 dernier jour</li>
+		<li>🏢 &nbsp;<b>Votre marque</b> — nom d'entreprise, sous-titre, couleur d'accent, position L/C/R</li>
+		<li>🖼️ &nbsp;<b>Bibliothèque médias</b> — offres illimitées avec expiration automatique</li>
+		<li>♿ &nbsp;<b>Accessible &amp; léger</b> — clavier, ESC, reduced-motion, 100 % vanilla JS</li>
+	</ul>
+
+	<a class="btn-dl" href="plugins/offerpulse.zip" download>⬇ TÉLÉCHARGER LE PLUGIN (.zip)</a>
+	<div class="meta">Version 1.0 • WordPress 5.0+ • PHP 7.0+ • Tout hébergeur • 11 Ko</div>
+
+	<a class="demo-btn" href="demo-offerpulse.html">🛰️ VOIR LA DÉMO EN DIRECT</a>
+
+	<div class="steps">
+		<h3>Installation en 3 étapes</h3>
+		<ol>
+			<li>Téléchargez le ZIP ci-dessus.</li>
+			<li>WordPress : <strong>Extensions → Ajouter → Téléverser une extension</strong>, sélectionnez le ZIP puis activez.</li>
+			<li>Menu <strong>⚡ Offres …</strong> dans l'admin : nom de l'entreprise, position, couleur, puis ajoutez vos offres (image 🖼️ + lien + date d'expiration). C'est tout !</li>
+		</ol>
+	</div>
+
+	<a class="back" href="index.html">← Retour au site Dental Ouest</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Démo OfferPulse — Offres Dynamiques</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f7fb;color:#1c2437;}
+.demo-nav{position:sticky;top:0;z-index:500;background:#0d2455;color:#fff;padding:13px 22px;font-size:13px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.demo-nav b{letter-spacing:.5px;}
+.demo-nav .pill{background:rgba(255,255,255,.12);border-radius:999px;padding:4px 13px;font-size:11px;}
+.demo-nav a{color:#ffd97a;text-decoration:none;font-weight:700;}
+.hero{padding:74px 22px 60px;text-align:center;background:linear-gradient(160deg,#0d2455,#0a3d7a 70%,#0d2455);color:#fff;}
+.hero h1{font-size:clamp(26px,5vw,40px);max-width:720px;margin:0 auto 14px;line-height:1.2;}
+.hero h1 span{color:#ffd97a;}
+.hero p{max-width:600px;margin:0 auto 26px;opacity:.85;font-size:15px;line-height:1.7;}
+.btn-demo{display:inline-block;background:#2db87a;color:#fff;font-weight:800;padding:14px 34px;border-radius:11px;text-decoration:none;transition:.25s;}
+.btn-demo:hover{filter:brightness(1.12);transform:translateY(-2px);}
+.btn-ghost2{display:inline-block;border:2px solid rgba(255,255,255,.35);color:#fff;font-weight:700;padding:12px 30px;border-radius:11px;text-decoration:none;margin-inline-start:10px;transition:.25s;}
+.btn-ghost2:hover{border-color:#ffd97a;color:#ffd97a;}
+.section{max-width:980px;margin:0 auto;padding:56px 22px;}
+.section h2{font-size:24px;margin-bottom:14px;color:#0d2455;}
+.section p{line-height:1.9;color:#3c4763;font-size:14.5px;max-width:780px;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:28px;}
+.card{background:#fff;border:1px solid #e4e8f2;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(13,36,85,.06);}
+.card h3{margin-bottom:8px;color:#0a3d7a;font-size:16px;}
+.card p{font-size:13px;line-height:1.7;}
+.hint{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:400;background:#10142a;color:#e8c96a;border:1px solid rgba(232,201,106,.5);font-size:12px;padding:10px 20px;border-radius:999px;box-shadow:0 8px 30px rgba(0,0,0,.25);text-align:center;max-width:92vw;}
+.swatches{position:fixed;bottom:120px;inset-inline-start:18px;z-index:400;display:flex;flex-direction:column;gap:8px;}
+.sw{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35);transition:.2s;}
+.sw:hover{transform:scale(1.18);}
+.sw.on{outline:2px solid #10131f;outline-offset:2px;}
+
+/* ================= OFFERPULSE CSS (identique plugin) ================= */
+:root{--ofp-accent:#e8c96a;--ofp-glow:rgba(232,201,106,.55);}
+.ofp-root{position:fixed;z-index:99990;pointer-events:none;}
+.ofp-pos-br{right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));}
+.ofp-btn{pointer-events:auto;position:relative;width:74px;height:86px;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:none;filter:drop-shadow(0 6px 22px var(--ofp-glow));transition:opacity .35s,transform .35s;opacity:.92;}
+.ofp-btn:hover{opacity:1;transform:translateY(-3px) scale(1.03);}
+.ofp-btn:focus-visible{outline:2px solid var(--ofp-accent);outline-offset:4px;border-radius:50%;}
+.ofp-orb{position:relative;width:74px;height:74px;border-radius:50%;
+ background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.28),transparent 42%),radial-gradient(circle at 68% 76%,var(--ofp-glow),transparent 58%),linear-gradient(160deg,#141a33,#232c52 62%,#10142a);
+ border:1px solid color-mix(in srgb,var(--ofp-accent) 65%,#ffffff22);
+ box-shadow:0 0 0 3px color-mix(in srgb,var(--ofp-accent) 22%,transparent),0 0 26px var(--ofp-glow);
+ overflow:hidden;}
+.ofp-orb::before{content:'';position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent 0deg,color-mix(in srgb,var(--ofp-accent) 85%,#fff) 42deg,transparent 88deg,transparent 240deg,color-mix(in srgb,var(--ofp-accent) 45%,#fff) 300deg,transparent 350deg);animation:ofp-spin 7s linear infinite;}
+.ofp-orb::after{content:'';position:absolute;inset:3px;border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.14),transparent 45%),linear-gradient(165deg,#161d3a,#0d1226);border:1px solid rgba(255,255,255,.06);}
+.ofp-glyph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;}
+.ofp-glyph svg{width:30px;height:30px;fill:none;stroke:var(--ofp-accent);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px var(--ofp-glow));animation:ofp-bob 3.2s ease-in-out infinite;}
+.ofp-badge{position:absolute;top:-2px;inset-inline-end:-2px;min-width:21px;height:21px;padding:0 5px;border-radius:999px;background:linear-gradient(135deg,#ff5f6d,#c81e3a);color:#fff;font-size:11px;font-weight:800;line-height:21px;text-align:center;box-shadow:0 2px 10px rgba(200,30,58,.65);border:2px solid #0d1226;z-index:3;}
+.ofp-tag{margin-top:5px;text-align:center;font-size:9.5px;font-weight:800;letter-spacing:2.5px;color:#eef2ff;text-shadow:0 1px 4px rgba(0,0,0,.85);}
+@keyframes ofp-spin{to{transform:rotate(360deg);}}
+@keyframes ofp-bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-2.5px);}}
+.ofp-halo{position:absolute;inset:-7px;border-radius:50%;border:1.5px solid var(--ofp-accent);opacity:0;animation:ofp-ping 2.6s cubic-bezier(.2,.6,.35,1) infinite;pointer-events:none;}
+@keyframes ofp-ping{0%{transform:scale(.82);opacity:.75;}70%{transform:scale(1.22);opacity:0;}100%{opacity:0;}}
+.ofp-btn.ofp-fade{opacity:0;pointer-events:none;transform:translateY(14px) scale(.9);}
+.ofp-pop{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,7,18,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);opacity:0;visibility:hidden;transition:.3s ease;}
+.ofp-pop.ofp-open{opacity:1;visibility:visible;}
+.ofp-panel{position:relative;width:min(560px,94vw);max-height:min(84vh,720px);overflow:auto;border-radius:22px;padding:30px 26px 24px;
+ background:linear-gradient(168deg,#131937 0%,#1a2144 55%,#12162b 100%);
+ border:1px solid color-mix(in srgb,var(--ofp-accent) 40%,#ffffff14);
+ box-shadow:0 30px 90px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.03) inset,0 0 60px var(--ofp-glow);
+ transform:translateY(26px) scale(.95);transition:.35s cubic-bezier(.2,.9,.3,1.15);scrollbar-width:thin;scrollbar-color:var(--ofp-accent) transparent;}
+.ofp-pop.ofp-open .ofp-panel{transform:none;}
+.ofp-panel::-webkit-scrollbar{width:8px;}
+.ofp-panel::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--ofp-accent) 55%,transparent);border-radius:99px;}
+.ofp-close{position:absolute;top:13px;inset-inline-end:13px;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#dfe6ff;font-size:19px;cursor:pointer;transition:.25s;line-height:1;}
+.ofp-close:hover{background:var(--ofp-accent);color:#10131f;border-color:var(--ofp-accent);transform:rotate(90deg);}
+.ofp-head{text-align:center;margin-bottom:20px;}
+.ofp-kicker{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:800;letter-spacing:3px;color:var(--ofp-accent);text-transform:uppercase;margin-bottom:9px;}
+.ofp-kicker::before,.ofp-kicker::after{content:'';height:1px;width:26px;background:linear-gradient(90deg,transparent,var(--ofp-accent));}
+.ofp-kicker::after{transform:scaleX(-1);}
+.ofp-title{font-size:clamp(19px,4vw,25px);font-weight:800;color:#f4f6ff;letter-spacing:.4px;line-height:1.25;margin:0;}
+.ofp-title em{font-style:normal;background:linear-gradient(120deg,var(--ofp-accent),#fff8dd 55%,var(--ofp-accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.ofp-sub{margin-top:7px;font-size:12.5px;color:#93a0c6;}
+.ofp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px;}
+.ofp-item{position:relative;display:block;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.09);background:#0d1226;text-decoration:none;transition:.3s;transform:translateZ(0);}
+.ofp-item:hover{transform:translateY(-5px);border-color:color-mix(in srgb,var(--ofp-accent) 60%,transparent);box-shadow:0 16px 40px rgba(0,0,0,.5),0 0 24px var(--ofp-glow);}
+.ofp-item img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;}
+.ofp-count{position:absolute;top:10px;inset-inline-start:10px;font-size:10.5px;font-weight:800;letter-spacing:.6px;color:#10131f;background:linear-gradient(135deg,#ffe9a8,var(--ofp-accent));padding:4px 9px;border-radius:999px;box-shadow:0 3px 12px rgba(0,0,0,.4);}
+.ofp-count.ofp-last{background:linear-gradient(135deg,#ff8f6b,#ff4d67);color:#fff;animation:ofp-blink 1.4s ease-in-out infinite;}
+@keyframes ofp-blink{50%{opacity:.72;}}
+.ofp-go{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 14px;font-size:12px;font-weight:700;color:#e9edff;background:rgba(255,255,255,.035);border-top:1px solid rgba(255,255,255,.07);}
+.ofp-go span:last-child{color:var(--ofp-accent);transition:.25s;}
+.ofp-item:hover .ofp-go span:last-child{transform:translateX(4px);}
+[dir="rtl"] .ofp-item:hover .ofp-go span:last-child{transform:scaleX(-1);}
+.ofp-note{margin-top:18px;text-align:center;font-size:12px;color:#8fa0cc;}
+@media(max-width:520px){.ofp-btn{width:60px;height:70px;}.ofp-orb{width:60px;height:60px;}.ofp-glyph svg{width:25px;height:25px;}.ofp-tag{font-size:8.5px;letter-spacing:1.8px;}.swatches{bottom:104px;}}
+@media(prefers-reduced-motion:reduce){.ofp-orb::before,.ofp-glyph svg,.ofp-halo,.ofp-count.ofp-last{animation:none;}}
+</style>
+</head>
+<body>
+
+<nav class="demo-nav">
+	<b>🦷 Mon Site de Démo</b>
+	<a href="#">Accueil</a><a href="#">Produits</a><a href="#">À propos</a><a href="#">Contact</a>
+	<span class="pill">← contenu factice pour tester la non-gêne</span>
+</nav>
+
+<div class="hint">🖱️ Glissez l'icône ⚡ où vous voulez • elle s'efface au défilement • testez les couleurs ↓</div>
+
+<header class="hero">
+	<h1>Bienvenue sur <span>votre site WordPress</span></h1>
+	<p>Ce contenu simule n'importe quel thème : titres, boutons, images… L'icône OfferPulse reste discrète et ne bloque rien.</p>
+	<a class="btn-demo" href="#sec2">Bouton principal →</a>
+	<a class="btn-ghost2" href="#sec3">Action secondaire</a>
+</header>
+
+<div class="section" id="sec2">
+	<h2>Titre de section — l'icône ne cache rien</h2>
+	<p>Faites défiler vers le bas : l'icône s'estompe automatiquement pendant la lecture, puis revient dès que vous remontez. Glissez-la où bon vous semble — sa position est mémorisée pour votre prochaine visite.</p>
+	<div class="cards">
+		<div class="card"><h3>Contenu riche</h3><p>Images, textes et boutons restent entièrement cliquables, même près des coins de l'écran.</p></div>
+		<div class="card"><h3>Zéro conflit</h3><p>Si un autre widget flottant existe (chat…), OfferPulse se replace intelligemment au-dessus.</p></div>
+		<div class="card"><h3>100 % responsive</h3><p>Taille adaptée aux mobiles, marges « safe-area » pour les encoches iPhone.</p></div>
+	</div>
+</div>
+
+<div class="section" id="sec3">
+	<h2>Faites défiler encore ↓</h2>
+	<p>L'anti-collision et le masquage au défilement fonctionnent sur toute la hauteur de la page. Remontez : l'icône réapparaît en fondu.</p>
+</div>
+<div class="section">
+	<h2>Encore une section</h2>
+	<p>Votre contenu reste le héros. OfferPulse ne fait qu'ajouter une touche commerciale élégante dans un coin.</p>
+</div>
+<div class="section" style="padding-bottom:140px;">
+	<h2>Bas de page</h2>
+	<p>Même tout en bas, l'icône garde ses distances avec vos éléments grâce à ses marges intelligentes.</p>
+</div>
+
+<!-- Sélecteur de couleur d'accent (démo uniquement) -->
+<div class="swatches" title="Couleur d'accent">
+	<span class="sw on" data-c="#e8c96a" style="background:#e8c96a;"></span>
+	<span class="sw" data-c="#39c6ff" style="background:#39c6ff;"></span>
+	<span class="sw" data-c="#c792ff" style="background:#c792ff;"></span>
+	<span class="sw" data-c="#41e0a5" style="background:#41e0a5;"></span>
+</div>
+
+<!-- ============ OFFERPULSE MARKUP ============ -->
+<div class="ofp-root ofp-pos-br" id="ofpRoot">
+	<div class="ofp-btn" id="ofpBtn" role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false"
+	     aria-label="Offres Mon Site" data-drag="1" data-autohide="1" data-smart="1">
+		<span class="ofp-halo"></span>
+		<span class="ofp-orb">
+			<span class="ofp-glyph">
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+					<path d="M20 12v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2"/>
+					<path d="M12 3v9"/><path d="m8 8 4 4 4-4"/>
+				</svg>
+			</span>
+		</span>
+		<span class="ofp-badge">3</span>
+		<span class="ofp-tag">OFFRE</span>
+	</div>
+</div>
+
+<div class="ofp-pop" id="ofpPop" role="dialog" aria-modal="true" aria-label="Offres de Mon Site">
+	<div class="ofp-panel" id="ofpPanel">
+		<button type="button" class="ofp-close" id="ofpClose" aria-label="Fermer">×</button>
+		<div class="ofp-head">
+			<span class="ofp-kicker">Mon Site de Démo</span>
+			<h2 class="ofp-title">Offres <em>spéciales</em> du moment</h2>
+			<p class="ofp-sub">Profitez vite de nos promotions exceptionnelles !</p>
+		</div>
+		<div class="ofp-grid" id="ofpGrid"></div>
+		<p class="ofp-note">Contactez-nous au +213 550 000 000 pour en profiter 📞</p>
+	</div>
+</div>
+
+<script>
+/* ---- Offres de démonstration : dates relatives à aujourd'hui ---- */
+(function () {
+	var today = new Date();
+	function iso(offsetDays) {
+		var d = new Date(today.getTime() + offsetDays * 86400000);
+		return d.toISOString().slice(0, 10);
+	}
+	var offers = [
+		{ img: 'images/2026/08/fauteuil-1024x687.png', days: 45 },
+		{ img: 'images/2026/08/panoramique.webp',      days: 2  },
+		{ img: 'images/2026/08/instruments.jpg',       days: 90 }
+	];
+	var grid = document.getElementById('ofpGrid');
+	offers.forEach(function (o) {
+		var a = document.createElement('a');
+		a.className = 'ofp-item';
+		a.href = '#';
+		a.innerHTML =
+			'<img src="' + o.img + '" alt="Offre">' +
+			'<span class="ofp-count' + (o.days <= 3 ? ' ofp-last' : '') + '">' +
+				(o.days > 0 ? '⏳ J-' + o.days : '🔥 Dernier jour') + '</span>' +
+			'<div class="ofp-go"><span>Découvrir l\'offre</span><span>➜</span></div>';
+		grid.appendChild(a);
+	});
+
+	/* ---- Couleurs d'accent ---- */
+	document.querySelectorAll('.sw').forEach(function (s) {
+		s.addEventListener('click', function () {
+			document.querySelectorAll('.sw').forEach(function (x) { x.classList.remove('on'); });
+			s.classList.add('on');
+			var c = s.getAttribute('data-c');
+			document.documentElement.style.setProperty('--ofp-accent', c);
+			document.documentElement.style.setProperty('--ofp-glow', c + '8c');
+		});
+	});
+
+	/* ---- Logique OfferPulse (portage statique du plugin) ---- */
+	var root = document.getElementById('ofpRoot'),
+	    btn  = document.getElementById('ofpBtn'),
+	    pop  = document.getElementById('ofpPop'),
+	    close= document.getElementById('ofpClose');
+	var DRAG = true, HIDE = true, SMART = true,
+	    KEY  = 'ofpPos:demo',
+	    moved = false;
+
+	try {
+		var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+		if (saved && typeof saved.x === 'number') place(saved.x, saved.y, true);
+	} catch (e) {}
+
+	function clamp(x, y) {
+		return {
+			x: Math.min(Math.max(4, x), innerWidth  - btn.offsetWidth  - 4),
+			y: Math.min(Math.max(4, y), innerHeight - btn.offsetHeight - 4)
+		};
+	}
+	function place(x, y, skipSmart) {
+		var c = clamp(x, y);
+		root.style.left = c.x + 'px';
+		root.style.top  = c.y + 'px';
+		root.style.right = 'auto'; root.style.bottom = 'auto';
+		root.style.transform = 'none';
+		if (!skipSmart && SMART) setTimeout(avoid, 60);
+	}
+	function avoid() {
+		var r = btn.getBoundingClientRect();
+		if (!r.width) return;
+		var others = [];
+		document.querySelectorAll('body *').forEach(function (el) {
+			if (root.contains(el) || el.closest('.ofp-pop')) return;
+			var cs = getComputedStyle(el);
+			if (cs.position !== 'fixed' || cs.visibility === 'hidden') return;
+			if (el.offsetWidth < 20 || el.offsetHeight < 20) return;
+			var o = el.getBoundingClientRect(),
+			    ix = !(o.right < r.left - 6 || o.left > r.right + 6 || o.bottom < r.top - 6 || o.top > r.bottom + 6);
+			if (ix && o.width < innerWidth * .9) others.push(o);
+		});
+		if (!others.length) return;
+		var x = r.left, y = r.top;
+		others.sort(function (a, b) { return b.top - a.top; }).some(function (o) {
+			if (Math.abs(o.left + o.width / 2 - (x + r.width / 2)) < Math.max(o.width, r.width)) {
+				y = o.top - r.height - 10; return true;
+			}
+			return false;
+		});
+		place(x, y, true);
+	}
+
+	var sx, sy, bx, by, dragging = false;
+	btn.addEventListener('pointerdown', function (e) {
+		if (e.button) return;
+		dragging = true; moved = false;
+		sx = e.clientX; sy = e.clientY;
+		var r = btn.getBoundingClientRect(); bx = r.left; by = r.top;
+		btn.setPointerCapture(e.pointerId);
+	});
+	btn.addEventListener('pointermove', function (e) {
+		if (!dragging) return;
+		var dx = e.clientX - sx, dy = e.clientY - sy;
+		if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+		if (moved) place(bx + dx, by + dy, true);
+	});
+	btn.addEventListener('pointerup', function () {
+		if (!dragging) return;
+		dragging = false;
+		if (moved) {
+			var r = btn.getBoundingClientRect();
+			try { localStorage.setItem(KEY, JSON.stringify({ x: r.left, y: r.top })); } catch (err) {}
+			avoid();
+		} else open();
+	});
+	btn.addEventListener('keydown', function (e) {
+		if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+	});
+
+	var lastY = scrollY, ticking = false;
+	addEventListener('scroll', function () {
+		if (ticking) return;
+		ticking = true;
+		requestAnimationFrame(function () {
+			btn.classList.toggle('ofp-fade', scrollY - lastY > 8);
+			lastY = scrollY; ticking = false;
+		});
+	}, { passive: true });
+
+	function open() {
+		pop.classList.add('ofp-open');
+		btn.setAttribute('aria-expanded', 'true');
+		setTimeout(function(){ close.focus(); }, 250);
+	}
+	function shut() {
+		pop.classList.remove('ofp-open');
+		btn.setAttribute('aria-expanded', 'false');
+		btn.focus();
+	}
+	close.addEventListener('click', shut);
+	pop.addEventListener('click', function (e) { if (e.target === pop) shut(); });
+	addEventListener('keydown', function (e) { if (e.key === 'Escape' && pop.classList.contains('ofp-open')) shut(); });
+
+	var rt;
+	addEventListener('resize', function () {
+		clearTimeout(rt);
+		rt = setTimeout(function () {
+			var r = btn.getBoundingClientRect();
+			place(r.left, r.top, true);
+			avoid();
+		}, 150);
+	});
+	setTimeout(avoid, 400);
+})();
+</script>
+</body>
+</html>
